@@ -1,13 +1,38 @@
-name: Diagnose Project
-on: workflow_dispatch
+name: Build Sirat Pro APK
+on:
+  push:
+  workflow_dispatch:
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: List files
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - uses: gradle/actions/setup-gradle@v3
+
+      - name: Fix project as README says
         run: |
-          echo "=== ROOT ===" && ls -la
-          echo "=== FIND GRADLEW ===" && find . -name gradlew -o -name build.gradle -o -name build.gradle.kts | head -20
-          echo "=== CHECK FLUTTER ===" && ls -la android/ 2>&1 || echo "no android folder"
-          echo "=== CHECK PACKAGE.JSON ===" && cat package.json 2>&1 | head -20 || echo "no package.json"
+          echo "sdk.dir=$ANDROID_HOME" > local.properties
+          echo "GEMINI_API_KEY=dummy" > .env
+          echo '{"project_info":{}}' > app/google-services.json || true
+          echo '{"project_info":{}}' > google-services.json || true
+          # هذا هو السطر اللي قالو حيدو فالـ README
+          sed -i '/signingConfig.*debugConfig/d' app/build.gradle.kts || true
+          sed -i '/signingConfigs/d' app/build.gradle.kts || true
+          cat app/build.gradle.kts | grep -n signing || echo "signing fixed"
+
+      - name: Build with Gradle (not gradlew)
+        run: gradle assembleDebug --stacktrace
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: sirat-pro-APK-FINAL
+          path: |
+            app/build/outputs/apk/debug/*.apk
+            **/build/outputs/apk/debug/*.apk

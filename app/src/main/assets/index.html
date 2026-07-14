@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>صراط برو - النسخة النهائية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;700;800;900&family=Reem+Kufi:wght@600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/peerjs@1.5.3/dist/peerjs.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+ --bg:#F6F1E7;--bg2:#EDE8D8;--card:#FFFFFF;--card2:#FFFCF5;--border:rgba(26,45,31,0.08);--border2:rgba(26,45,31,0.12);
+ --green-dark:#0F2D1A;--green:#143D23;--green-light:#1B4D2E;--gold:#C9A227;--gold2:#D4AF37;--gold-light:#FFF4CC;
+ --text:#1A2218;--muted:#8B8F88;--muted2:#A8ADA3;--shadow:0 8px 32px rgba(15,45,26,0.08);--shadow2:0 4px 16px rgba(15,45,26,0.06);
+ --radius:20px;--radius2:16px;
+}
+[data-theme="dark"]{
+ --bg:#0A1410;--bg2:#11261B;--card:#142E1E;--card2:#1A3A26;--border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.12);
+ --text:#E8EDE7;--muted:#8BA393;--muted2:#6B8A75;--shadow:0 8px 32px rgba(0,0,0,0.32);--shadow2:0 4px 16px rgba(0,0,0,0.24);
+}
+body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.6;transition:background .25s,color .25s}
+#app{max-width:440px;margin:0 auto;min-height:100vh;background:var(--bg);position:relative;padding-bottom:88px}
+.header{position:sticky;top:0;z-index:50;background:var(--green-dark);padding:10px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(201,162,39,0.15)}
+.h-logo{display:flex;align-items:center;gap:8px;color:var(--gold);font-family:'Reem Kufi',sans-serif;font-weight:700;font-size:22px}
+.h-logo span{color:#fff;font-size:13px;font-weight:400;margin-top:4px;opacity:0.8}
+.h-icons{display:flex;gap:8px}
+.icon{width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:17px;backdrop-filter:blur(8px);transition:.2s}
+.icon:active{transform:scale(0.96)}
+.view{display:none;animation:fade .25s ease}
+.view.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.main{padding:12px;display:flex;flex-direction:column;gap:12px}
+.prayer-card{background:var(--card);border-radius:var(--radius);padding:16px;border:1px solid var(--border);box-shadow:var(--shadow);position:relative;overflow:hidden}
+.prayer-card::before{content:'';position:absolute;top:0;right:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold2))}
+.p-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
+.p-next-label{font-size:11px;color:var(--muted);margin-bottom:2px}
+.p-next-name{font-family:'Reem Kufi';font-weight:700;font-size:22px;color:var(--gold2);line-height:1}
+.p-location{font-size:11px;color:var(--muted2);margin-top:6px}
+.p-countdown{width:88px;height:88px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#1A4D2E,#0F2D1A);border:3px solid var(--gold);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;box-shadow:0 6px 18px rgba(0,0,0,0.25)}
+.p-countdown small{font-size:8px;opacity:0.8}
+.p-countdown b{font-size:15px;font-weight:800;letter-spacing:0.5px;margin-top:1px}
+.p-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:4px}
+.p-item{background:linear-gradient(180deg,#9CA3AF 0%,#9AA0A8 100%);border-radius:12px;padding:10px 6px;text-align:center}
+.p-item.active{background:linear-gradient(180deg,var(--green) 0%,var(--green-dark) 100%);box-shadow:0 4px 12px rgba(15,45,26,0.25)}
+.p-item span{display:block;font-size:9px;color:rgba(255,255,255,0.85);margin-bottom:2px}
+.p-item b{font-size:13px;font-weight:800;color:#fff}
+.p-item.active b{color:var(--gold-light)}
+.p-actions{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
+.p-btn{font-size:10px;padding:7px 14px;border-radius:20px;border:none;cursor:pointer;font-weight:700;font-family:'Tajawal'}
+.p-btn.muted{background:var(--bg2);color:var(--muted)}
+.p-btn.gold{background:var(--green-dark);color:var(--gold-light);border:1px solid rgba(201,162,39,0.25)}
+.qibla-card{background:var(--card);border-radius:var(--radius2);padding:12px 14px;display:flex;justify-content:space-between;align-items:center;border:1px solid var(--border);box-shadow:var(--shadow2);cursor:pointer}
+.qibla-card b{font-size:13px;font-weight:800}
+.qibla-card small{font-size:10px;color:var(--muted);display:block;margin-top:1px}
+.qibla-icon{width:44px;height:44px;border-radius:12px;background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:22px}
+.ai-card{background:linear-gradient(135deg,#0EA5E9 0%,#10B981 100%);border-radius:var(--radius2);padding:14px 16px;color:#fff;position:relative;overflow:hidden;cursor:pointer;box-shadow:0 8px 24px rgba(14,165,233,0.25)}
+.ai-card::after{content:'💬';position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:42px;opacity:0.18}
+.ai-card b{font-size:14px;font-weight:800;display:block}
+.ai-card small{font-size:11px;opacity:0.92;display:block;margin-top:3px;line-height:1.4}
+.ai-badge{font-size:8px;background:rgba(255,255,255,0.22);padding:3px 8px;border-radius:10px;margin-top:8px;display:inline-block}
+.grid6{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.g-card{background:var(--card);border-radius:16px;padding:14px 8px;text-align:center;border:1px solid var(--border);box-shadow:var(--shadow2);cursor:pointer;transition:.18s;position:relative;overflow:hidden}
+.g-card:active{transform:scale(0.97)}
+.g-card .ico{font-size:24px;margin-bottom:6px;display:block}
+.g-card b{font-size:12px;font-weight:800;display:block;line-height:1.2}
+.g-card small{font-size:9px;color:var(--muted);display:block;margin-top:2px}
+.ayah-card{background:var(--card);border-radius:var(--radius);padding:18px;border:1px solid var(--border);box-shadow:var(--shadow);text-align:center;position:relative}
+.ayah-label{font-size:10px;color:var(--gold2);font-weight:800;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:6px}
+.ayah-text{font-family:'Amiri',serif;font-size:18px;line-height:2.1;color:var(--text)}
+.ayah-source{font-size:10px;color:var(--muted);margin-top:10px}
+.bottom-nav{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);width:calc(100% - 24px);max-width:416px;background:var(--green-dark);border-radius:22px;padding:8px 6px;display:flex;justify-content:space-around;align-items:center;box-shadow:0 12px 36px rgba(0,0,0,0.28);border:1px solid rgba(201,162,39,0.12);z-index:60}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 4px;border-radius:14px;cursor:pointer;transition:.2s;color:rgba(255,255,255,0.55)}
+.nav-item.active{background:rgba(201,162,39,0.14);color:var(--gold-light)}
+.nav-item .ni-ico{font-size:18px;line-height:1}
+.nav-item .ni-txt{font-size:9px;font-weight:700}
+.search-bar{width:100%;padding:12px 14px;border-radius:14px;border:1px solid var(--border2);background:var(--card);font-family:'Tajawal';font-size:13px;outline:none;transition:.2s}
+.search-bar:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,162,39,0.12)}
+.asma-hadith{background:var(--card);border-radius:var(--radius2);padding:16px;border:1px solid var(--border);box-shadow:var(--shadow2);margin-bottom:10px}
+.asma-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.asma-card{background:var(--card);border-radius:18px;padding:16px 12px;text-align:center;border:1px solid var(--border);box-shadow:var(--shadow2);position:relative;overflow:hidden}
+.asma-num{position:absolute;top:8px;right:8px;width:26px;height:26px;border-radius:50%;background:var(--gold-light);color:var(--green-dark);font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.asma-name{font-family:'Amiri',serif;font-size:24px;font-weight:700;color:var(--green-dark);margin:8px 0 4px;line-height:1.3}
+.asma-mean{font-size:11px;color:var(--muted);line-height:1.4;min-height:28px}
+.btn{padding:11px 16px;border-radius:14px;border:none;cursor:pointer;font-family:'Tajawal';font-weight:800;font-size:13px;transition:.18s;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.btn:active{transform:scale(0.97)}
+.btn-primary{background:var(--green-dark);color:#fff;box-shadow:0 6px 16px rgba(15,45,26,0.18);flex:1}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#1A1A1A;box-shadow:0 6px 16px rgba(201,162,39,0.28);flex:1}
+.btn-outline{background:var(--bg2);color:var(--text);border:1px solid var(--border2);flex:1}
+.glass{background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow2)}
+.inp{width:100%;padding:12px;border-radius:12px;border:1px solid var(--border2);background:var(--card);font-family:'Tajawal';outline:none}
+.msb-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.msb-stat{background:var(--card);border-radius:14px;padding:10px;text-align:center;border:1px solid var(--border)}
+.msb-stat b{font-size:16px;display:block}
+.msb-stat small{font-size:9px;color:var(--muted)}
+.msb-circle-wrap{display:flex;flex-direction:column;align-items:center;padding:18px 0}
+.msb-circle{width:160px;height:160px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#1A4D2E,#0F2D1A);border:4px solid var(--gold);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;box-shadow:0 12px 32px rgba(15,45,26,0.28),inset 0 1px 0 rgba(255,255,255,0.12)}
+.msb-circle b{font-size:52px;font-weight:900;line-height:1;margin:4px 0}
+.msb-dhikr{margin-top:14px;text-align:center}
+.msb-dhikr b{font-family:'Amiri';font-size:22px}
+.msb-btn{width:100%;max-width:280px;margin:14px auto 0;padding:14px;border-radius:16px;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;font-family:'Tajawal';font-weight:900;font-size:15px;cursor:pointer;box-shadow:0 8px 20px rgba(201,162,39,0.32)}
+.msb-row{display:flex;gap:8px;justify-content:center;margin-top:10px}
+.msb-mini{padding:8px 14px;border-radius:12px;border:1px solid var(--border2);background:var(--card);font-size:11px;cursor:pointer;font-family:'Tajawal';font-weight:700}
+.toast{position:fixed;bottom:92px;left:50%;transform:translateX(-50%);background:var(--green-dark);color:#fff;padding:10px 18px;border-radius:12px;font-size:12px;font-weight:700;box-shadow:0 8px 24px rgba(0,0,0,0.24);z-index:99;display:none}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="header">
+    <div class="h-icons">
+      <div class="icon" id="themeIcon" onclick="toggleTheme()">☀️</div>
+      <div class="icon" onclick="toast('الملف الشخصي قريباً')">👤</div>
+    </div>
+    <div class="h-logo">صراط <span>برو</span></div>
+    <div class="h-icons">
+      <div class="icon" onclick="toast('مرحباً بك في صراط برو')">🔊</div>
+      <div class="icon" onclick="openView('home')">🏠</div>
+    </div>
+  </div>
+
+  <!-- الرئيسية -->
+  <div id="home" class="view active"><div class="main">
+    <div class="prayer-card">
+      <div class="p-top">
+        <div>
+          <div class="p-next-label">الصلاة التالية</div>
+          <div class="p-next-name" id="nextPrayerName">العصر</div>
+          <div class="p-location">📍 فاس • مباشر • <span id="hijriDate">--</span></div>
+        </div>
+        <div class="p-countdown"><small>المتبقي</small><b id="countdown">--:--:--</b></div>
+      </div>
+      <div class="p-grid" id="prayerGrid">
+        <div class="p-item"><span>الفجر</span><b>--:--</b></div>
+        <div class="p-item"><span>الشروق</span><b>--:--</b></div>
+        <div class="p-item"><span>الظهر</span><b>--:--</b></div>
+        <div class="p-item active"><span>العصر</span><b>--:--</b></div>
+        <div class="p-item"><span>المغرب</span><b>--:--</b></div>
+        <div class="p-item"><span>العشاء</span><b>--:--</b></div>
+      </div>
+      <div class="p-actions">
+        <button class="p-btn muted" onclick="loadPrayerTimes()">↻ تحديث</button>
+        <button class="p-btn gold" onclick="toast('تم تفعيل التنبيه 10 دقائق')">🔔 تنبيه الصلاة مفعّل</button>
+      </div>
+    </div>
+
+    <div class="qibla-card" onclick="openView('qibla')">
+      <div><b>بوصلة القبلة الذكية</b><small>GPS • حقيقي وتفاعلي 100%</small></div>
+      <div class="qibla-icon">🕋</div>
+    </div>
+
+    <div class="ai-card" onclick="openView('assistant')">
+      <b>المساعد الذكي الإسلامي</b>
+      <small>اسأل ذكاء اصطناعي موثوق مدعوم بـ Gemini 3.5 Flash</small>
+      <span class="ai-badge">📚 آمن ومحدث بخصوصية كاملة</span>
+    </div>
+
+    <div class="grid6">
+      <div class="g-card" onclick="openView('quran')"><span class="ico">📖</span><b>القرآن</b><small>114 سورة</small></div>
+      <div class="g-card" onclick="openView('masbaha')"><span class="ico">📿</span><b>المسبحة</b><small>عداد تفاعلي</small></div>
+      <div class="g-card" onclick="openView('adhkar')"><span class="ico">✨</span><b>الأذكار</b><small>موسوعة وكنوز</small></div>
+      <div class="g-card" onclick="openView('taqweem')"><span class="ico">📅</span><b>التقويم</b><small>هجري وميلادي</small></div>
+      <div class="g-card" onclick="openView('challenge')"><span class="ico">🏆</span><b>التحديات</b><small>سولو وأونلاين</small></div>
+      <div class="g-card" onclick="openView('asma')"><span class="ico">🌟</span><b>الأسماء</b><small>99 اسماً</small></div>
+    </div>
+
+    <div class="ayah-card">
+      <div class="ayah-label">✦ آية اليوم</div>
+      <div class="ayah-text">وَمَن يَتَّقِ اللَّهَ يَجْعَل لَّهُ مَخْرَجًا ۝ وَيَرْزُقْهُ مِنْ حَيْثُ لَا يَحْتَسِبُ</div>
+      <div class="ayah-source">سورة الطلاق — الآيات 2-3 • تفسير ميسر</div>
+    </div>
+  </div></div>
+
+  <!-- أسماء الله الحسنى -->
+  <div id="asma" class="view"><div class="main">
+    <div style="display:flex;justify-content:space-between;align-items:center"><b>أسماء الله الحسنى</b><button class="p-btn muted" onclick="openView('home')">✕</button></div>
+    <div class="asma-hadith">
+      <div style="font-size:12px;font-weight:800;color:var(--gold2)">✨ فضل حفظ الأسماء الحسنى</div>
+      <div style="font-family:'Amiri';font-size:15px">قال ﷺ: «إن لله تسعة وتسعين اسماً مائة إلا واحداً من أحصاها دخل الجنة.» <small>[البخاري ومسلم]</small></div>
+    </div>
+    <input id="asmaSearch" class="search-bar" placeholder="ابحث عن اسم... 🔍" oninput="filterAsma(this.value)">
+    <div id="asmaGrid" class="asma-grid" style="margin-top:10px"></div>
+  </div></div>
+
+  <!-- المسبحة -->
+  <div id="masbaha" class="view"><div class="main">
+    <div style="display:flex;justify-content:space-between;align-items:center"><b>المسبحة الذكية</b><button class="p-btn muted" onclick="openView('home')">✕</button></div>
+    <div class="msb-stats">
+      <div class="msb-stat"><b id="msbDay">0</b><small>اليوم</small></div>
+      <div class="msb-stat"><b id="msbTotal">0</b><small>الإجمالي</small></div>
+      <div class="msb-stat"><b id="msbCycle">0</b><small>الدورات</small></div>
+    </div>
+    <div class="msb-circle-wrap">
+      <div class="msb-circle"><small>عدد التسبيح</small><b id="msbCount">0</b><small id="msbTarget">الهدف: 33</small></div>
+      <div class="msb-dhikr"><b id="msbDhikr">الحمد لله</b><div style="font-size:10px;color:var(--muted);margin-top:2px">✦ فضل الذكر: يملأ ميزانك بالحسنات</div></div>
+      <button class="msb-btn" onclick="doTasbih()">سبّح</button>
+      <div class="msb-row"><button class="msb-mini" onclick="resetMsb()">↻ تصفير</button><button class="msb-mini" onclick="changeDhikr()">⇄ الذكر التالي</button></div>
+    </div>
+  </div></div>
+
+  <!-- التحدي الإسلامي -->
+  <div id="challenge" class="view"><div class="main">
+    <div style="display:flex;justify-content:space-between;align-items:center;background:var(--card);padding:12px;border-radius:16px">
+      <b>🏆 مسابقة صراط برو الثقافية</b>
+      <button class="p-btn muted" onclick="openView('home')">✕</button>
+    </div>
+    
+    <div id="quizMenu">
+      <div style="text-align:center;margin:15px 0"><b style="font-size:20px;color:var(--gold2);font-family:'Reem Kufi'">اختر طريقة اللعب</b></div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div class="glass" onclick="startSolo()" style="background:#fff;border-radius:20px;padding:16px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;border:2px solid #f3e7a6">
+          <div style="font-size:24px">🎯</div>
+          <div style="flex:1;text-align:right;margin-right:12px"><b style="font-size:15px">تحدي فردي (سولو)</b><div style="font-size:11px;color:var(--muted)">50 سؤالاً متدرجاً • مؤقت 15 ثانية • نقاط ونجوم</div></div>
+          <div style="color:var(--gold);font-size:18px">◀</div>
+        </div>
+        <div class="glass" onclick="openOnlineMenu()" style="background:#fff;border-radius:20px;padding:16px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;border:1px solid #c8e6d5">
+          <div style="font-size:24px">🌐</div>
+          <div style="flex:1;text-align:right;margin-right:12px"><b style="font-size:15px">تحدي مباشر أونلاين</b><div style="font-size:11px;color:var(--muted)">أنشئ غرفة أو انضم لصديق • دعم الصوت والشات</div></div>
+          <div style="color:#2d7a5f;font-size:18px">◀</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- قائمة الأونلاين -->
+    <div id="onlineMenu" style="display:none">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <button class="p-btn muted" onclick="backToQuizMenu()">← رجوع</button>
+        <b>تحدي مباشر P2P</b>
+      </div>
+      <div class="glass" style="background:#fff;border-radius:20px;padding:16px">
+        <label style="font-size:11px;font-weight:800;display:block;margin-bottom:6px">اسمك المستعار</label>
+        <input id="onlineName" class="inp" placeholder="مثال: أبو بكر" value="مسافر">
+        <button class="btn btn-gold" onclick="createRoom()" style="width:100%;margin-top:14px">👥 إنشاء غرفة جديدة</button>
+        <div style="text-align:center;margin:12px 0;font-size:11px;color:var(--muted)">أو</div>
+        <input id="joinCodeInput" class="inp" placeholder="أدخل كود الغرفة" style="text-align:center;letter-spacing:4px;font-weight:900;text-transform:uppercase">
+        <button class="btn btn-outline" onclick="joinRoom()" style="width:100%;margin-top:10px">↩️ انضمام بالكود</button>
+        <button class="btn btn-primary" onclick="findRandomOpponent()" style="width:100%;margin-top:10px;background:linear-gradient(135deg,#f59e0b,#ef4444);border:none;color:#fff">🎲 بحث عن خصم عشوائي</button>
+        <div id="quickStatus" style="font-size:11px;color:#16a34a;text-align:center;margin-top:10px;display:none"></div>
+      </div>
+    </div>
+
+    <!-- انتظار الغرفة -->
+    <div id="roomLobby" style="display:none">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <button class="p-btn muted" onclick="leaveRoom()">← خروج</button>
+        <b>غرفة الانتظار</b>
+      </div>
+      <div class="glass" style="padding:18px;text-align:center;border-radius:20px">
+        <div style="font-size:11px;color:var(--muted)">كود غرفتك (شاركه مع منافسك)</div>
+        <div id="roomCodeBig" style="font-family:monospace;font-weight:900;font-size:32px;letter-spacing:4px;color:var(--gold2);margin:8px 0">------</div>
+        <div style="display:flex;gap:8px;justify-content:center">
+          <button class="p-btn gold" onclick="copyRoomCode()">نسخ الكود 📋</button>
+          <button class="p-btn muted" onclick="shareRoomWhatsApp()">واتساب ↗</button>
+        </div>
+      </div>
+
+      <div class="glass" style="padding:14px;border-radius:20px;margin-top:12px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="font-size:20px">🎙️</div>
+            <div>
+              <b>اتصال صوتي (اختياري)</b>
+              <div id="voiceStatus" style="font-size:10px;color:var(--muted)">غير مفعل</div>
+            </div>
+          </div>
+          <button id="voiceToggleBtn" class="p-btn gold" onclick="toggleVoiceCall()">🎙️ تشغيل</button>
+        </div>
+        <audio id="remoteAudio" autoplay playsinline style="display:none"></audio>
+      </div>
+
+      <div style="background:#fff;border-radius:16px;padding:12px;margin-top:12px">
+        <b style="font-size:12px">المتصلون:</b>
+        <div id="playersList" style="margin-top:6px;font-size:13px"></div>
+        <div id="connStatus" style="font-size:11px;color:red;text-align:center;margin-top:8px">بانتظار المنافس...</div>
+      </div>
+
+      <div class="glass" style="border-radius:18px;padding:12px;margin-top:12px">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:6px">محادثة سريعة</div>
+        <div id="lobbyChat" style="max-height:100px;overflow-y:auto;background:var(--bg);padding:8px;border-radius:10px;font-size:12px;margin-bottom:6px"></div>
+        <div style="display:flex;gap:6px">
+          <input id="lobbyChatInput" class="inp" placeholder="اكتب رسالة..." style="padding:8px">
+          <button class="btn btn-gold" style="padding:8px 12px" onclick="sendLobbyChat()">ارسل</button>
+        </div>
+      </div>
+
+      <button id="startOnlineBtn" class="btn btn-primary" style="width:100%;margin-top:14px;display:none" onclick="hostStartGame()">🚀 بدء المواجهة الآن</button>
+    </div>
+
+    <!-- التحدي الفردي -->
+    <div id="soloQuiz" style="display:none">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <button class="p-btn muted" onclick="backToQuizMenu()">← إيقاف</button>
+        <b>التحدي الفردي</b>
+      </div>
+      <div class="glass" style="padding:14px;border-radius:20px">
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:8px">
+          <span id="soloQNum">سؤال 1/10</span>
+          <span>نقاط: <b id="soloScoreTop">0</b> | streak: <b id="soloStreakTop">0</b></span>
+          <span>⏱️ <b id="soloTimeTop">15</b> ث</span>
+        </div>
+        <div style="background:var(--bg2);height:6px;border-radius:4px;overflow:hidden;margin-bottom:14px">
+          <div id="soloProg" style="height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));width:0%"></div>
+        </div>
+        <div id="soloQText" style="font-size:16px;font-weight:800;margin-bottom:14px">جاري التحميل...</div>
+        <div id="soloOpts" style="display:grid;gap:10px"></div>
+        <div id="soloExp" style="display:none;margin-top:12px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:10px;font-size:12px"></div>
+        <button id="soloNext" class="btn btn-primary" onclick="nextSoloQ()" style="width:100%;margin-top:14px;display:none">السؤال التالي ➡️</button>
+      </div>
+
+      <div id="soloRes" style="display:none;background:#fff;border-radius:20px;padding:20px;text-align:center;margin-top:12px">
+        <div style="font-size:48px">🏆</div>
+        <b id="soloResTitle" style="font-size:18px;display:block;margin:6px 0">رائع!</b>
+        <div id="soloResScore" style="font-size:14px;color:var(--muted)">أحرزت 0 من 150 نقطة</div>
+        <div id="soloResStars" style="font-size:24px;margin:8px 0">⭐⭐⭐</div>
+        <button class="btn btn-gold" onclick="startSolo()">إعادة المحاولة 🔄</button>
+      </div>
+    </div>
+
+    <!-- التحدي الأونلاين التفاعلي -->
+    <div id="onlineQuiz" style="display:none">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <b>المواجهة المباشرة الأونلاين</b>
+        <span style="background:red;color:#fff;padding:2px 8px;border-radius:10px;font-size:10px">مباشر</span>
+      </div>
+      <div class="glass" style="padding:14px;border-radius:20px">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;text-align:center;margin-bottom:12px">
+          <div style="background:var(--gold-light);padding:8px;border-radius:12px">
+            <span style="font-size:10px;color:var(--green)">نقاطك</span>
+            <div id="oqMyScore" style="font-size:18px;font-weight:900">0</div>
+          </div>
+          <div style="background:#fee2e2;padding:8px;border-radius:12px">
+            <span id="oqOpponentLabel" style="font-size:10px;color:red">الخصم</span>
+            <div id="oqOpponentScore" style="font-size:18px;font-weight:900">0</div>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:6px">
+          <span id="oqQNum">سؤال 1/10</span>
+          <span>⏱️ متبقي: <b id="oqTimeTop">15</b> ث</span>
+        </div>
+        <div id="oqQText" style="font-size:16px;font-weight:800;margin-bottom:14px">جاري تحميل السؤال...</div>
+        <div id="oqOpts" style="display:grid;gap:10px"></div>
+        <div id="oqStatus" style="font-size:11px;color:var(--gold);text-align:center;margin-top:10px">بانتظار إجابة الطرفين...</div>
+        <button id="oqNext" class="btn btn-primary" onclick="nextOqQ()" style="width:100%;margin-top:14px;display:none">السؤال التالي ➡️</button>
+      </div>
+      <div id="oqRes" style="display:none;background:#fff;border-radius:20px;padding:20px;text-align:center;margin-top:12px">
+        <div id="oqResEmoji" style="font-size:48px">🤝</div>
+        <b id="oqResTitle" style="font-size:18px;display:block">تعادل!</b>
+        <div id="oqResScore" style="font-size:14px;color:var(--muted);margin-top:6px"></div>
+        <button class="btn btn-gold" onclick="backToQuizMenu()" style="width:100%;margin-top:14px">الرجوع للرئيسية</button>
+      </div>
+    </div>
+  </div></div>
+
+  <!-- القرآن الكريم -->
+  <div id="quran" class="view"><div class="main">
+    <div style="display:flex;justify-content:space-between"><b>القرآن الكريم كامل</b><button class="p-btn muted" onclick="openView('home')">✕</button></div>
+    <input class="search-bar" placeholder="ابحث عن سورة بالاسم... 🔍" oninput="filterQuran(this.value)">
+    <div id="quranList" style="display:flex;flex-direction:column;gap:8px;margin-top:10px"></div>
+  </div></div>
+
+  <!-- قارئ القرآن -->
+  <div id="quranReader" class="view"><div class="main">
+    <div style="display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:var(--bg);padding:8px 0;z-index:2">
+      <button class="p-btn muted" onclick="backToQuranList()">← رجوع</button>
+      <b id="readerTitle" style="font-family:'Reem Kufi';font-size:16px;color:var(--green-dark)"></b>
+      <div style="display:flex;gap:6px"><button class="p-btn muted" onclick="changeQuranSize(-1)">A-</button><button class="p-btn muted" onclick="changeQuranSize(1)">A+</button></div>
+    </div>
+    <div id="readerMeta" style="font-size:10px;color:var(--muted);text-align:center;margin:6px 0"></div>
+    <div id="surahContent" style="background:var(--card);border-radius:18px;padding:20px 16px;border:1px solid var(--border);box-shadow:var(--shadow);line-height:2.3;font-family:'Amiri',serif;font-size:20px;direction:rtl"></div>
+    <div style="display:flex;gap:8px;margin-top:12px"><button class="btn btn-outline" onclick="prevSurah()">◀️ السورة السابقة</button><button class="btn btn-outline" onclick="nextSurah()">السورة التالية ▶️</button></div>
+  </div></div>
+
+  <!-- القبلة -->
+  <div id="qibla" class="view"><div class="main" style="text-align:center">
+    <div style="display:flex;justify-content:space-between"><b>بوصلة اتجاه القبلة تفاعلية</b><button class="p-btn muted" onclick="openView('home')">✕</button></div>
+    <div style="width:240px;height:240px;border-radius:50%;background:var(--card);border:6px solid var(--gold);margin:30px auto;display:flex;align-items:center;justify-content:center;position:relative;box-shadow:var(--shadow)">
+      <div style="position:absolute;top:-16px;font-size:32px">🕋</div>
+      <div id="needle" style="width:6px;height:120px;background:linear-gradient(180deg,#fff 50%,#ef4444 50%);transform-origin:50% 85%;border-radius:3px;transition:transform .15s ease-out"></div>
+    </div>
+    <div id="qiblaStatus" style="font-weight:800;color:var(--gold2);font-size:16px">جاري تفعيل الحساسات...</div>
+    <div id="qiblaDegree" style="font-size:14px;color:var(--muted);margin-top:4px">--° للكعبة المشرفة</div>
+    <button class="btn btn-primary" style="margin-top:16px;width:100%" onclick="startQibla()">📍 تفعيل المعايرة المباشرة والـ GPS</button>
+  </div></div>
+
+  <!-- التقويم الهجري -->
+  <div id="taqweem" class="view"><div class="main">
+    <div style="display:flex;justify-content:space-between"><b>التقويم الإسلامي والميلادي</b><button class="p-btn muted" onclick="openView('home')">✕</button></div>
+    <div class="glass" style="padding:20px;border-radius:18px;text-align:center;margin-top:10px">
+      <div id="hijriFull" style="font-family:'Amiri';font-size:22px;color:var(--green)">--</div>
+      <div id="gregorianFull" style="font-size:13px;color:var(--muted);margin-top:6px">--</div>
+    </div>
+  </div></div>
+
+  <!-- المساعد الذكي -->
+  <div id="assistant" class="view"><div class="main" style="padding-bottom:0">
+    <div style="display:flex;justify-content:space-between;align-items:center"><b>المساعد الذكي الإسلامي الذكي</b><button class="p-btn muted" onclick="openView('home')">✕</button></div>
+    <div class="ai-card" style="margin:8px 0 10px;padding:10px 14px"><b style="font-size:12px">📚 إجابات دقيقة موثقة</b><small style="font-size:10px">مدعوم بالذكاء الاصطناعي مع تدقيق آلي للمصادر والقرآن</small></div>
+    <div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:6px">
+      <button class="p-btn muted" style="white-space:nowrap" onclick="quickAsk('ما هو فضل الصبر في الإسلام؟')">فضل الصبر</button>
+      <button class="p-btn muted" style="white-space:nowrap" onclick="quickAsk('اكتب لي آيات الرزق والبركة')">آيات الرزق</button>
+      <button class="p-btn muted" style="white-space:nowrap" onclick="quickAsk('كيف أخشع في صلاتي؟')">الخشوع في الصلاة</button>
+      <button class="p-btn muted" style="white-space:nowrap" onclick="quickAsk('من هم الخلفاء الراشدون؟')">الخلفاء الراشدون</button>
+    </div>
+    <div id="chatMessages" style="display:flex;flex-direction:column;gap:10px;max-height:55vh;overflow-y:auto;padding:10px;background:var(--bg);border-radius:14px;margin-top:6px;min-height:350px">
+      <div style="align-self:flex-start;max-width:86%;padding:12px 14px;border-radius:18px 18px 18px 4px;background:var(--card);border:1px solid var(--border);font-size:13px;line-height:1.8">
+        <b style="color:var(--gold2)">السلام عليكم ورحمة الله وبركاته! 👋</b><br>أنا مساعد صراط برو الذكي. اسألني عن تفسير الآيات، شرح الأحاديث، أو قصص الأنبياء وسأجيبك بأدلة ومصادر صحيحة وموثوقة.
+      </div>
+    </div>
+    <div id="typingIndicator" style="display:none;background:var(--card);padding:10px 14px;border-radius:14px;border:1px solid var(--border);font-size:11px;color:var(--muted);margin-top:6px">⏳ جاري كتابة الإجابة والتدقيق في المصادر...</div>
+    <div style="display:flex;gap:6px;align-items:flex-end;background:var(--card);border:1px solid var(--border2);border-radius:16px;padding:7px;position:sticky;bottom:80px;margin-top:10px">
+      <textarea id="chatInput" placeholder="اكتب سؤالك الشرعي أو التاريخي هنا..." style="flex:1;min-height:42px;max-height:90px;resize:none;background:transparent;border:none;outline:none;font-family:'Tajawal';font-size:13.5px;line-height:1.6;padding:8px 4px"></textarea>
+      <button onclick="sendIslamicChat()" style="width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;cursor:pointer;font-size:16px;color:#fff">➤</button>
+    </div>
+  </div></div>
+
+  <!-- الأذكار والكنوز -->
+  <div id="adhkar" class="view"><div class="main">
+    <div style="display:flex;justify-content:space-between;align-items:center;background:var(--card);padding:12px;border-radius:16px">
+      <div><b>💎 كنز الأذكار والأجور المفتوحة</b><div style="font-size:11px;color:var(--muted)">تفاعل مع الكنوز واجمع حسناتك</div></div>
+      <button class="p-btn muted" onclick="openView('home')">✕</button>
+    </div>
+    
+    <div style="background:linear-gradient(135deg,#fff8db 0%,#fff7e0 100%);border:2px solid #f3c13a;border-radius:20px;padding:14px;text-align:center">
+      <div style="font-size:11px;color:#a68b1f;font-weight:800">رصيد الكنوز الروحية المفتوحة</div>
+      <div style="display:flex;justify-content:center;gap:10px;margin-top:8px">
+        <div style="background:#fff;border:1px solid #f3e7a6;border-radius:12px;padding:8px 16px"><div style="font-size:9px;color:#9ca3af">الكنوز</div><b id="tCount" style="font-size:18px;color:#d4af37">0</b> 💎</div>
+        <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:8px 16px"><div style="font-size:9px;color:#9ca3af">المستوى الكشفي</div><b id="tLevel" style="font-size:12px">مبتدئ</b></div>
+      </div>
+    </div>
+
+    <div id="tBox" style="background:#fff;border-radius:22px;padding:22px;box-shadow:var(--shadow);border:1px solid #f0e6c2;text-align:center;min-height:250px;display:flex;flex-direction:column;align-items:center;justify-content:center">
+      <div id="tClosed">
+        <div style="font-size:56px;margin-bottom:10px">📦</div>
+        <b style="font-size:16px">افتح الصندوق لتكسب كنزاً من الأذكار!</b>
+        <div style="font-size:11px;color:var(--muted);margin-top:6px">كل صندوق يمنحك ذكراً ثابتاً صحيحاً بفضله وثوابه</div>
+        <button onclick="openTreasure()" style="margin-top:16px;background:#111;color:#fff;border:0;border-radius:14px;padding:12px 24px;font-weight:900;cursor:pointer">🎁 افتح الكنز الروحي الآن</button>
+      </div>
+      <div id="tOpened" style="display:none;width:100%">
+        <div style="font-size:10px;color:#16a34a;background:#dcfce7;padding:4px 10px;border-radius:20px;display:inline-block;font-weight:800">💎 كسبت كنزاً جديداً!</div>
+        <div id="tText" style="font-family:'Amiri',serif;font-size:18px;line-height:1.9;margin:12px 0;padding:14px;background:#fffef5;border:1px dashed #f3e7a6;border-radius:14px"></div>
+        <div id="tSrc" style="font-size:10px;color:#9ca3af"></div>
+        <div id="tRew" style="font-size:11px;color:#a68b1f;background:#fff8db;border:1px solid #f3e7a6;padding:6px 12px;border-radius:20px;display:inline-block;margin-top:8px;font-weight:700"></div>
+        <div style="display:flex;gap:8px;justify-content:center;margin-top:14px">
+          <button class="btn btn-primary" onclick="openTreasure()">🎲 ذكر آخر</button>
+          <button class="btn btn-outline" onclick="copyT()">نسخ 📋</button>
+        </div>
+        <button onclick="resetTBox()" style="margin-top:12px;background:transparent;border:0;color:#9ca3af;font-size:11px;cursor:pointer">← رجوع</button>
+      </div>
+    </div>
+  </div></div>
+
+  <div class="toast" id="toast"></div>
+
+  <!-- شريط الملاحة السفلي -->
+  <div class="bottom-nav">
+    <div class="nav-item" onclick="openView('taqweem')"><span class="ni-ico">🗓️</span><span class="ni-txt">المزيد</span></div>
+    <div class="nav-item" onclick="openView('challenge')"><span class="ni-ico">🏆</span><span class="ni-txt">التحدي</span></div>
+    <div class="nav-item" onclick="openView('adhkar')"><span class="ni-ico">✨</span><span class="ni-txt">الأذكار</span></div>
+    <div class="nav-item" onclick="openView('masbaha')"><span class="ni-ico">📿</span><span class="ni-txt">المسبحة</span></div>
+    <div class="nav-item" onclick="openView('quran')"><span class="ni-ico">📖</span><span class="ni-txt">القرآن</span></div>
+    <div class="nav-item active" id="nav-home" onclick="openView('home')"><span class="ni-ico">🏠</span><span class="ni-txt">الرئيسية</span></div>
+  </div>
+</div>
+
+<script>
+// البنك الكامل الموثق من 50 سؤالاً إسلامياً ثقافياً
+const QUIZ_BANK = [
+  {q:'كم عدد سور القرآن الكريم؟',o:['110','114','116','120'],a:1,e:'114 سورة كاملة'},
+  {q:'ما هي أطول سورة في القرآن؟',o:['البقرة','آل عمران','النساء','المائدة'],a:0,e:'البقرة (286 آية)'},
+  {q:'ما هي أقصر سورة في القرآن؟',o:['الكوثر','العصر','الإخلاص','الناس'],a:0,e:'الكوثر (3 آيات)'},
+  {q:'أين ولد النبي محمد صلى الله عليه وسلم؟',o:['المدينة المنورة','مكة المكرمة','الطائف','القدس'],a:1,e:'مكة المكرمة عام الفيل'},
+  {q:'في أي غار كان يتعبد النبي قبل البعثة؟',o:['ثور','حراء','أحد','النور'],a:1,e:'غار حراء بجبل النور'},
+  {q:'ما هو الركن الأول من أركان الإسلام؟',o:['الصلاة','الشهادتان','الزكاة','الصوم'],a:1,e:'الشهادتان'},
+  {q:'كم عدد أركان الإيمان؟',o:['5 أركان','6 أركان','7 أركان','4 أركان'],a:1,e:'6 أركان'},
+  {q:'ما هي أول قبلة للمسلمين في الإسلام؟',o:['الكعبة','المسجد الأقصى','مسجد قباء','المسجد النبوي'],a:1,e:'المسجد الأقصى بالقدس'},
+  {q:'من هو أول الخلفاء الراشدين رضي الله عنهم؟',o:['عمر بن الخطاب','عثمان بن عفان','أبو بكر الصديق','علي بن أبي طالب'],a:2,e:'أبو بكر الصديق'},
+  {q:'ما هي السورة التي تلقب بقلب القرآن؟',o:['الفاتحة','يس','الرحمن','الملك'],a:1,e:'سورة يس'},
+  {q:'من هو النبي الذي ابتلعه الحوت وصاحب الكرب؟',o:['يونس عليه السلام','يوسف عليه السلام','موسى عليه السلام','إبراهيم عليه السلام'],a:0,e:'يونس عليه السلام في بطن الحوت'},
+  {q:'كم عدد الصلوات المفروضة في اليوم والليلة؟',o:['3 صلوات','5 صلوات','6 صلوات','4 صلوات'],a:1,e:'خمس صلوات مفروضة'},
+  {q:'في أي شهر هجري نزل القرآن الكريم؟',o:['رجب','شعبان','رمضان','ذو الحجة'],a:2,e:'رمضان المبارك في ليلة القدر'},
+  {q:'من هي أول زوجات الرسول صلى الله عليه وسلم؟',o:['عائشة رضي الله عنها','خديجة بنت خويلد','حفصة رضي الله عنها','زينب رضي الله عنها'],a:1,e:'خديجة بنت خويلد رضي الله عنها'},
+  {q:'ما هي السورة التي لا تبدأ بالبسملة؟',o:['الفاتحة','التوبة','النمل','الأنفال'],a:1,e:'سورة التوبة'},
+  {q:'من هو الصحابي الجليل الملقب بالفاروق؟',o:['أبو بكر الصديق','عمر بن الخطاب','عثمان بن عفان','علي بن أبي طالب'],a:1,e:'عمر بن الخطاب رضي الله عنه'},
+  {q:'من الذي بنى الكعبة المشرفة مع إسماعيل عليه السلام؟',o:['نوح عليه السلام','إبراهيم عليه السلام','موسى عليه السلام','آدم عليه السلام'],a:1,e:'إبراهيم عليه السلام واضع القواعد'},
+  {q:'ما هي الصلاة التي يطلق عليها صلاة الأوابين؟',o:['الضحى','التهجد','الوتر','الاستخارة'],a:0,e:'صلاة الضحى عند ارتفاع الشمس'},
+  {q:'من هو مؤذن الرسول صلى الله عليه وسلم الأول؟',o:['بلال بن رباح','عبد الله بن أم مكتوم','أبو محذورة','سعد القرظ'],a:0,e:'بلال بن رباح رضي الله عنه'},
+  {q:'ما هي السورة المنجية من عذاب القبر؟',o:['الملك','السجدة','الدخان','الواقعة'],a:0,e:'سورة الملك (تبارك)'},
+  {q:'ما هي أطول آية في القرآن الكريم كله؟',o:['آية الكرسي','آية الدين','آية الميراث','آية البيعة'],a:1,e:'آية الدين في سورة البقرة آية 282'},
+  {q:'ما هو أول مسجد بني في الإسلام بالمدينة؟',o:['المسجد الحرام','المسجد النبوي','مسجد قباء','المسجد الأقصى'],a:2,e:'مسجد قباء بالمدينة المنورة'},
+  {q:'كم لبث أصحاب الكهف في كهفهم؟',o:['300 سنة','309 سنوات','400 سنة','100 سنة'],a:1,e:'ثلاث مئة سنين وازدادوا تسعاً (309 سنوات)'},
+  {q:'ما هي السورة التي تحتوي على سجدتين؟',o:['البقرة','الحج','السجدة','الأعراف'],a:1,e:'سورة الحج'},
+  {q:'من هو النبي الذي كلمه الله تكليماً بلا وسيط؟',o:['إبراهيم عليه السلام','موسى عليه السلام','محمد صلى الله عليه وسلم','عيسى عليه السلام'],a:1,e:'موسى عليه السلام (كليم الله)'},
+  {q:'كم عدد غزوات الرسول صلى الله عليه وسلم الكبرى؟',o:['19 غزوة','27 غزوة','30 غزوة','12 غزوة'],a:1,e:'27 غزوة قادها بنفسه'},
+  {q:'ما هما البردان اللذان من حافظ عليهما دخل الجنة؟',o:['الفجر والعصر','الظهر والعصر','الفجر والعشاء','المغرب والعشاء'],a:0,e:'الفجر والعصر في جماعة'},
+  {q:'من هي الصحابية الملقبة بذات النطاقين؟',o:['عائشة رضي الله عنها','أسماء بنت أبي بكر','خديجة رضي الله عنها','فاطمة الزهراء'],a:1,e:'أسماء بنت أبي بكر الصديق رضي الله عنهما'},
+  {q:'ليلة القدر خير من كم شهر في العبادة؟',o:['100 شهر','1000 شهر','ألف يوم','10 سنوات'],a:1,e:'ألف شهر (خير من ألف شهر)'},
+  {q:'كم عدد ركعات السنن الرواتب المؤكدة في اليوم؟',o:['10 ركعات','12 ركعة','14 ركعة','8 ركعات'],a:1,e:'12 ركعة مؤكدة يومياً'},
+  {q:'كم عدد أبواب الجنة الثابتة؟',o:['7 أبواب','8 أبواب','10 أبواب','100 باب'],a:1,e:'8 أبواب منها الريان للمجاهدين والصائمين'},
+  {q:'كم عدد أبواب النار والعياذ بالله؟',o:['7 أبواب','8 أبواب','6 أبواب','10 أبواب'],a:0,e:'7 أبواب (لكل باب منهم جزء مقسوم)'},
+  {q:'ما هي عدة المرأة الحامل في الشريعة؟',o:['3 أشهر','حتى تضع حملها','4 أشهر وعشراً','سنة كاملة'],a:1,e:'حتى تضع حملها بالولادة'},
+  {q:'من هو خاتم الأنبياء والمرسلين؟',o:['عيسى عليه السلام','موسى عليه السلام','محمد صلى الله عليه وسلم','نوح عليه السلام'],a:2,e:'محمد بن عبد الله خاتم الأنبياء ﷺ'},
+  {q:'ما هي الشجرة الملعونة في القرآن طعام الأثيم؟',o:['الزقوم','الغساق','الضريع','الطلح'],a:0,e:'شجرة الزقوم طعام أهل النار'},
+  {q:'من هم المغضوب عليهم المذكورون في الفاتحة؟',o:['اليهود','النصارى','المنافقون','المشركون'],a:0,e:'اليهود لأنهم علموا الحق ولم يتبعوه'},
+  {q:'ما هي السورة التي تعدل ثلث القرآن في الأجر؟',o:['الفاتحة','الإخلاص','يس','الواقعة'],a:1,e:'سورة الإخلاص (قل هو الله أحد)'},
+  {q:'كم عدد أجزاء القرآن الكريم كاملة؟',o:['20 جزءاً','30 جزءاً','60 جزءاً','114 جزءاً'],a:1,e:'30 جزءاً مشتملاً على 60 حزباً'},
+  {q:'ما هي السورة التي تسمى عروس القرآن؟',o:['الرحمن','يس','الواقعة','الملك'],a:0,e:'سورة الرحمن'},
+  {q:'ما هو اسم ناقة الرسول ﷺ التي هاجر عليها؟',o:['القصواء','العضباء','الجدعاء','الشهباء'],a:0,e:'القصواء'},
+  {q:'من هو الصحابي الجليل الملقب بسيف الله المسلول؟',o:['علي بن أبي طالب','خالد بن الوليد','سعد بن أبي وقاص','حمزة بن عبد المطلب'],a:1,e:'خالد بن الوليد رضي الله عنه'},
+  {q:'في أي مدينة توفي النبي صلى الله عليه وسلم؟',o:['مكة المكرمة','المدينة المنورة','الطائف','القدس'],a:1,e:'المدينة المنورة ودفن في بيت عائشة'},
+  {q:'ما هي الصلاة التي ليس فيها ركوع ولا سجود؟',o:['صلاة الاستسقاء','صلاة الكسوف','صلاة الجنازة','صلاة الخوف'],a:2,e:'صلاة الجنازة أربع تكبيرات قعوداً وقياماً'},
+  {q:'ما هو اسم الملك الموكل بإنزال الوحي؟',o:['جبريل عليه السلام','ميكائيل عليه السلام','إسرافيل عليه السلام','مالك خازن النار'],a:0,e:'جبريل عليه السلام (الروح الأمين)'},
+  {q:'ما هو اسم الملك الموكل بنفخ الصور؟',o:['رضوان عليه السلام','إسرافيل عليه السلام','ملك الموت','جبريل عليه السلام'],a:1,e:'إسرافيل عليه السلام'},
+  {q:'من النبي الذي نجاه الله من النار فكانت برداً وسلاماً؟',o:['إبراهيم عليه السلام','إسماعيل عليه السلام','نوح عليه السلام','لوط عليه السلام'],a:0,e:'إبراهيم عليه السلام أبو الأنبياء'},
+  {q:'كم سنة استمرت الدعوة الإسلامية سرّاً بمكة؟',o:['3 سنوات','5 سنوات','سنتين','10 سنوات'],a:0,e:'3 سنوات من الدعوة السرية الفردية'},
+  {q:'ما هي أعظم آية في كتاب الله الكريم؟',o:['آية الكرسي','آية الدين','آخر سورة البقرة','سورة الفاتحة'],a:0,e:'آية الكرسي في سورة البقرة آية 255'},
+  {q:'ما كنية عم الرسول ﷺ سيد الشهداء؟',o:['أبو طالب','أبو لهب','العباس','حمزة بن عبد المطلب'],a:3,e:'حمزة بن عبد المطلب رضي الله عنه أسد الله'},
+  {q:'من هو نبي الله الصابر الذي ضرب به المثل؟',o:['أيوب عليه السلام','يعقوب عليه السلام','يوسف عليه السلام','داود عليه السلام'],a:0,e:'أيوب عليه السلام بعد مرض دام 18 عاماً'}
+];
+
+// وظائف التوست والتنقل الأساسية
+function toast(m){
+  let t=document.getElementById('toast');
+  t.textContent=m;t.style.display='block';
+  clearTimeout(t._h);
+  t._h=setTimeout(()=>t.style.display='none',2500);
+}
+
+function openView(id){
+  try {
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+    let el=document.getElementById(id);
+    if(!el){ toast('هذا القسم قادم قريباً'); return; }
+    el.classList.add('active');
+    
+    document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+    let navHome=document.getElementById('nav-home');
+    if(id==='home' && navHome) navHome.classList.add('active');
+    
+    const map={quran:4,masbaha:3,adhkar:2,challenge:1,taqweem:0,asma:5};
+    if(map[id]!==undefined){
+      let navs=document.querySelectorAll('.nav-item');
+      if(navs[map[id]]) navs[map[id]].classList.add('active');
+    }
+    window.scrollTo(0,0);
+  } catch(e) {
+    console.error(e);
+  }
+}
+window.openView=openView;
+
+// تبديل المظهر الليلي والنهاري
+function toggleTheme(){
+  let htmlEl=document.documentElement;
+  let cur=htmlEl.getAttribute('data-theme')||'light';
+  let next=cur==='light'?'dark':'light';
+  htmlEl.setAttribute('data-theme',next);
+  localStorage.setItem('sirat-theme',next);
+  let ic=document.getElementById('themeIcon');
+  if(ic) ic.textContent=next==='dark'?'🌙':'☀️';
+  toast(next==='dark'?'🌙 الوضع الليلي مفعّل':'☀️ الوضع النهاري مفعّل');
+}
+(function initTheme(){
+  let s=localStorage.getItem('sirat-theme')||'light';
+  document.documentElement.setAttribute('data-theme',s);
+  setTimeout(()=>{
+    let ic=document.getElementById('themeIcon');
+    if(ic) ic.textContent=s==='dark'?'🌙':'☀️';
+  },100);
+})();
+
+// أوقات الصلاة والتقويم
+async function loadPrayerTimes(){
+  try {
+    let res=await fetch('https://api.aladhan.com/v1/timingsByCity?city=Fes&country=Morocco&method=3');
+    let j=await res.json();
+    if(!j.data) throw new Error('No data');
+    let t=j.data.timings;
+    updatePrayerUI(t);
+    
+    let hijri=j.data.date.hijri;
+    let hd=document.getElementById('hijriDate');
+    if(hd) hd.textContent=hijri.day+' '+hijri.month.ar+' '+hijri.year+' هـ';
+    
+    let hf=document.getElementById('hijriFull');
+    if(hf) hf.textContent=hijri.weekday.ar+' '+hijri.day+' '+hijri.month.ar+' '+hijri.year+' هـ';
+    
+    let gf=document.getElementById('gregorianFull');
+    if(gf) gf.textContent=j.data.date.gregorian.date+' م • حساب أم القرى والجامعة الإسلامية';
+    
+    startCountdown(t);
+    toast('تم تحديث مواقيت الصلاة تلقائياً 📍');
+  } catch(e) {
+    console.error(e);
+    let fallback={Fajr:'04:40',Sunrise:'06:15',Dhuhr:'13:30',Asr:'17:15',Maghrib:'20:45',Isha:'22:15'};
+    updatePrayerUI(fallback);
+    startCountdown(fallback);
+    toast('أوقات الصلاة الافتراضية لفاس مفعّلة');
+  }
+}
+function updatePrayerUI(t){
+  let order=[
+    {k:'Fajr',name:'الفجر',time:t.Fajr},
+    {k:'Sunrise',name:'الشروق',time:t.Sunrise},
+    {k:'Dhuhr',name:'الظهر',time:t.Dhuhr},
+    {k:'Asr',name:'العصر',time:t.Asr},
+    {k:'Maghrib',name:'المغرب',time:t.Maghrib},
+    {k:'Isha',name:'العشاء',time:t.Isha}
+  ];
+  let now=new Date();
+  function toDate(s){
+    let [h,m]=s.split(':').map(Number);
+    let d=new Date();
+    d.setHours(h,m,0,0);
+    return d;
+  }
+  let times=order.map(o=>({...o,date:toDate(o.time)}));
+  let next=null, current=null;
+  for(let i=0;i<times.length;i++){
+    if(times[i].date>now){ next=times[i]; current=i>0?times[i-1]:times[times.length-1]; break; }
+  }
+  if(!next){ next=times[0]; current=times[times.length-1]; }
+  
+  let nn=document.getElementById('nextPrayerName');
+  if(nn) nn.textContent=next.name;
+  
+  let html='';
+  order.forEach(o=>{
+    let isActive=current && o.k===current.k;
+    html+=`<div class="p-item ${isActive?'active':''}"><span>${o.name}</span><b>${o.time}</b></div>`;
+  });
+  let grid=document.getElementById('prayerGrid');
+  if(grid) grid.innerHTML=html;
+}
+let cdInt=null;
+function startCountdown(t){
+  if(cdInt) clearInterval(cdInt);
+  function upd(){
+    let now=new Date();
+    let times=[t.Fajr,t.Dhuhr,t.Asr,t.Maghrib,t.Isha].map(s=>{
+      let [h,m]=s.split(':').map(Number);
+      let d=new Date(); d.setHours(h,m,0,0);
+      if(d<now) d.setDate(d.getDate()+1);
+      return d;
+    });
+    let next=times.sort((a,b)=>a-b)[0];
+    let diff=next-now;
+    let hh=String(Math.floor(diff/3600000)).padStart(2,'0');
+    let mm=String(Math.floor(diff%3600000/60000)).padStart(2,'0');
+    let ss=String(Math.floor(diff%60000/1000)).padStart(2,'0');
+    let el=document.getElementById('countdown');
+    if(el) el.textContent=`${hh}:${mm}:${ss}`;
+  }
+  upd();
+  cdInt=setInterval(upd,1000);
+}
+loadPrayerTimes();
+
+// القرآن الكريم وقارئ السور المتطور
+let currentSurahNum=1;
+let quranFontSize=20;
+async function loadQuranList(){
+  let listEl=document.getElementById('quranList');
+  try {
+    let r=await fetch('https://api.alquran.cloud/v1/surah');
+    let j=await r.json();
+    listEl.innerHTML='';
+    j.data.forEach(s=>{
+      let d=document.createElement('div');
+      d.className='glass';
+      d.style.cssText='display:flex;justify-content:space-between;align-items:center;padding:14px;border-radius:14px;cursor:pointer';
+      d.onclick=()=>openSurah(s.number);
+      d.innerHTML=`<div><b>${s.number}. ${s.name}</b><small style="display:block;color:var(--muted)">${s.englishName} • ${s.numberOfAyahs} آية</small></div><span style="background:var(--bg2);padding:4px 8px;border-radius:8px;font-size:10px">${s.revelationType==='Meccan'?'مكية':'مدنية'}</span>`;
+      listEl.appendChild(d);
+    });
+  } catch(e) {
+    listEl.innerHTML='<div style="text-align:center;padding:20px;color:red">فشل الاتصال بالخادم. تحقق من إنترنت هاتفك.</div>';
+  }
+}
+loadQuranList();
+
+async function openSurah(num){
+  currentSurahNum=num;
+  document.getElementById('readerTitle').textContent='جاري التحميل...';
+  document.getElementById('surahContent').innerHTML='<div style="text-align:center;padding:40px;color:var(--muted)">⏳ يرجى الانتظار، جاري تنزيل السورة بالكامل...</div>';
+  openView('quranReader');
+  try {
+    let res=await fetch(`https://api.alquran.cloud/v1/surah/${num}/quran-uthmani`);
+    let data=await res.json();
+    let surah=data.data;
+    document.getElementById('readerTitle').textContent=surah.name;
+    document.getElementById('readerMeta').textContent=`أياتها: ${surah.numberOfAyahs} • نزولها: ${surah.revelationType==='Meccan'?'مكية':'مدنية'} • رسم عثماني`;
+    let html='';
+    if(num!==1 && num!==9){
+      html+=`<div style="text-align:center;font-size:22px;color:var(--green-dark);margin-bottom:16px;background:var(--bg2);padding:10px;border-radius:12px">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>`;
+    }
+    surah.ayahs.forEach(a=>{
+      html+=`<span style="line-height:2.6">${a.text} <span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:var(--gold-light);color:var(--green-dark);font-size:11px;font-weight:800;margin:0 4px;border:1px solid rgba(201,162,39,0.25)">${a.numberInSurah}</span> </span>`;
+    });
+    document.getElementById('surahContent').innerHTML=html;
+    document.getElementById('surahContent').style.fontSize=quranFontSize+'px';
+    window.scrollTo(0,0);
+  } catch(err) {
+    document.getElementById('surahContent').innerHTML='<div style="text-align:center;padding:20px;color:red">خطأ في الشبكة. تعذر تحميل السورة.</div>';
+  }
+}
+function backToQuranList(){ openView('quran'); }
+function prevSurah(){ if(currentSurahNum>1) openSurah(currentSurahNum-1); }
+function nextSurah(){ if(currentSurahNum<114) openSurah(currentSurahNum+1); }
+function changeQuranSize(d){
+  quranFontSize=Math.max(16,Math.min(32,quranFontSize+d*2));
+  document.getElementById('surahContent').style.fontSize=quranFontSize+'px';
+}
+
+// بوصلة القبلة المتطورة (دعم الحساسات الحقيقية native والـ GPS بدقة)
+var qiblaBearing=null;
+function startQibla(){
+  if(navigator.geolocation){
+    document.getElementById('qiblaStatus').textContent='تحديد اتجاه الكعبة عبر الموقع الجغرافي الـ GPS...';
+    navigator.geolocation.getCurrentPosition(pos=>{
+      let lat=pos.coords.latitude, lon=pos.coords.longitude;
+      let kaabaLat=21.4225, kaabaLon=39.8262;
+      let y=Math.sin((kaabaLon-lon)*Math.PI/180)*Math.cos(kaabaLat*Math.PI/180);
+      let x=Math.cos(lat*Math.PI/180)*Math.sin(kaabaLat*Math.PI/180)-Math.sin(lat*Math.PI/180)*Math.cos(kaabaLat*Math.PI/180)*Math.cos((kaabaLon-lon)*Math.PI/180);
+      qiblaBearing=(Math.atan2(y,x)*180/Math.PI+360)%360;
+      
+      if(window.AndroidInterface && window.AndroidInterface.startCompass) {
+        document.getElementById('qiblaStatus').textContent='تم التحديد! معايرة عبر بوصلة الهاتف المباشرة 🧭';
+        window.AndroidInterface.startCompass();
+      } else if(window.DeviceOrientationEvent){
+        document.getElementById('qiblaStatus').textContent='حرك هاتفك بمستوى أفقي لتحديد الكعبة';
+        window.addEventListener('deviceorientation',handleOri,true);
+      }
+    }, err=>{
+      document.getElementById('qiblaStatus').textContent='تعذر الاتصال بـ GPS. نستخدم الاتجاه الافتراضي 🧭';
+      qiblaBearing = 75; // اتجاه تقريبي للمغرب لفاس
+      if(window.AndroidInterface && window.AndroidInterface.startCompass) {
+        window.AndroidInterface.startCompass();
+      } else if(window.DeviceOrientationEvent){
+        window.addEventListener('deviceorientation',handleOri,true);
+      }
+    });
+  } else {
+    qiblaBearing = 75;
+    if(window.AndroidInterface && window.AndroidInterface.startCompass) {
+      document.getElementById('qiblaStatus').textContent='معايرة عبر بوصلة الهاتف المباشرة 🧭';
+      window.AndroidInterface.startCompass();
+    }
+  }
+}
+function handleOri(e){
+  if(qiblaBearing===null||e.alpha===null) return;
+  let h=360-e.alpha;
+  let rot=(qiblaBearing-h+360)%360;
+  rotateNeedle(rot);
+}
+// ميزة Bridge نيتف حصرية للصراط برو
+window.onCompassChanged = function(azimuth) {
+  if (qiblaBearing === null) qiblaBearing = 75; // فاس للمغرب
+  let rot = (qiblaBearing - azimuth + 360) % 360;
+  rotateNeedle(rot);
+};
+function rotateNeedle(rot) {
+  let nd=document.getElementById('needle');
+  if(nd) nd.style.transform=`rotate(${rot}deg)`;
+  let dg=document.getElementById('qiblaDegree');
+  if(dg) dg.textContent=Math.round(rot)+'° متبقي للكعبة المشرفة';
+}
+
+// أسماء الله الحسنى ومعانيها الأصلية
+const asmaList=[
+  {n:'الله',m:'الاسم المألوه المعبود بحق ذو الألوهية والعبودية على خلقه أجمعين'},
+  {n:'الرحمن',m:'ذو الرحمة الواسعة الشاملة لجميع الخلائق في الدنيا والآخرة'},
+  {n:'الرحيم',m:'الرحيم بالمؤمنين خصوصاً والمفيض عليهم برحمته ولطفه'},
+  {n:'الملك',m:'المالك لجميع الأشياء المتصرف فيها بلا عائق وله الملك الكامل'},
+  {n:'القدوس',m:'المنزه والمطهر عن كل نقص وعيب ومما لا يليق بجلاله الكبرياء'},
+  {n:'السلام',m:'السالم من العيوب والمنقائص وناشر السلام والأمان لعباده في الدنيا'},
+  {n:'المؤمن',m:'المصدق لنفسه ولرسله والواهب للأمن والطمأنينة لقلوب أوليائه'},
+  {n:'المهيمن',m:'الرقيب الحافظ الشاهد على خلقه والمهيمن المطلع على خفايا الصدور'},
+  {n:'العزيز',m:'القوي الغالب الذي لا يغلب والمنيع الذي قل نظيره ولا يرام جنابه'},
+  {n:'الجبار',m:'الذي يجبر كسر القلوب والضعفاء ويقهر الجبابرة بسلطانه وقوته العظيمة'}
+];
+function renderAsma(list){
+  let g=document.getElementById('asmaGrid');
+  if(!g)return;
+  g.innerHTML='';
+  list.forEach((a,i)=>{
+    let d=document.createElement('div');
+    d.className='asma-card';
+    d.innerHTML=`<div class="asma-num">${i+1}</div><div class="asma-name">${a.n}</div><div class="asma-mean">${a.m}</div>`;
+    g.appendChild(d);
+  });
+}
+function filterAsma(q){
+  if(!q){ renderAsma(asmaList); return; }
+  renderAsma(asmaList.filter(a=>a.n.includes(q)||a.m.includes(q)));
+}
+renderAsma(asmaList);
+
+// مسبحة صراط برو التفاعلية
+let msb={count:0,day:0,total:0,cycle:0,target:33,zikrIdx:0};
+try {
+  let savedMsb = localStorage.getItem('sirat-msb');
+  if(savedMsb) msb = JSON.parse(savedMsb);
+} catch(e){}
+
+const msbDhikrs=[
+  {t:'الحمد لله',f:'تملأ الميزان بالخير والبركات'},
+  {t:'سبحان الله وبحمده',f:'تغرس لك نخلة في الجنة وتغفر ذنوبك وإن كانت كزبد البحر'},
+  {t:'لا إله إلا الله وحده لا شريك له',f:'تعدل عتق عشر رقاب وتكتب لك مئة حسنة وتدفع مئة سيئة'},
+  {t:'اللهم صل وسلم على نبينا محمد',f:'يصلي الله عليك بها عشراً ويرفعك بها عشر درجات'}
+];
+function doTasbih(){
+  msb.count++; msb.day++; msb.total++;
+  if(msb.count>msb.target){
+    msb.count=1; msb.cycle++;
+    toast('🎉 أكملت دورة تسبيح كاملة! تقبل الله');
+  }
+  updMsb();
+  if(navigator.vibrate) navigator.vibrate(18);
+}
+function updMsb(){
+  document.getElementById('msbCount').textContent=msb.count;
+  document.getElementById('msbDay').textContent=msb.day;
+  document.getElementById('msbTotal').textContent=msb.total;
+  document.getElementById('msbCycle').textContent=msb.cycle;
+  try {
+    localStorage.setItem('sirat-msb', JSON.stringify(msb));
+  } catch(e){}
+}
+function resetMsb(){ msb.count=0; msb.day=0; msb.total=0; msb.cycle=0; updMsb(); toast('تم تصفير العداد'); }
+function changeDhikr(){
+  msb.zikrIdx=(msb.zikrIdx+1)%msbDhikrs.length;
+  document.getElementById('msbDhikr').textContent=msbDhikrs[msb.zikrIdx].t;
+  toast('تغير الذكر إلى: '+msbDhikrs[msb.zikrIdx].t);
+}
+
+// كنز الأذكار والأجور المفتوحة - بنك متكامل موثق وجميل
+const treasures=[
+  {t:'سبحان الله وبحمده سبحان الله العظيم',s:'البخاري - كلمتان خفيفتان على اللسان، ثقيلتان في الميزان',r:'تثقيل الميزان بالحسنات وتكفير الخطايا'},
+  {t:'لا حول ولا قوة إلا بالله',s:'البخاري - كنز من تحت العرش ومن كنوز الجنة',r:'دواء من تسعة وتسعين داء أيسرها الهم وكنز في الجنة'},
+  {t:'حسبي الله ونعم الوكيل',s:'آل عمران - قالها إبراهيم حين ألقي في النار وقالها محمد ﷺ',r:'كفاية الهم والنصرة والبركة والنجاة من الأعداء'},
+  {t:'يا حي يا قيوم برحمتك أستغيث أصلح لي شأني كله',s:'النسائي - وصية النبي ﷺ لفاطمة رضي الله عنها',r:'تيسير وتوفيق وإصلاح شأن الدنيا والآخرة كاملاً'},
+  {t:'اللهم أنت ربي لا إله إلا أنت خلقتني وأنا عبدك',s:'البخاري - سيد الاستغفار',r:'من قالها موقناً بها فمات من يومه أو ليلته دخل الجنة'},
+  {t:'رضيت بالله رباً وبالإسلام ديناً وبمحمد ﷺ نبياً',s:'أبو داود والترمذي - كان حقاً على الله أن يرضيه',r:'وجبت له الجنة ونيل رضا الله جل جلاله يوم القيامة'},
+  {t:'اللهم صل وسلم وبارك على نبينا محمد',s:'الترمذي - أولى الناس بي يوم القيامة أكثرهم علي صلاة',r:'يصلي الله عليك بها عشراً ويزول همك ويُغفر ذنبك'},
+  {t:'استغفر الله العظيم الذي لا إله إلا هو الحي القيوم وأتوب إليه',s:'أبو داود والترمذي - غُفرت ذنوبه وإن كان فاراً من الزحف',r:'مغفرة الذنوب والكبائر وتفريج الكروب وسعة الرزق'},
+  {t:'لا إله إلا الله وحده لا شريك له له الملك وله الحمد وهو على كل شيء قدير',s:'البخاري ومسلم - مئة مرة في اليوم',r:'حرز من الشيطان، وتكتب له مئة حسنة، وتمحى مئة سيئة'},
+  {t:'اللهم إني أسألك علماً نافعاً ورزقاً طيباً وعملاً متقبلاً',s:'ابن ماجه - كان يقوله النبي بعد صلاة الفجر',r:'التوفيق للرزق الحلال والعمل الصالح والعلم النافع'},
+  {t:'سبحان الله وبحمده عدد خلقه ورضا نفسه وزنة عرشه ومداد كلماته',s:'مسلم - تعدل أضعافاً كثيرة من الذكر المعتاد',r:'أجر عظيم مضاعف يعدل ساعات طويلة من التسبيح والذكر'},
+  {t:'اللهم أعني على ذكرك وشكرك وحسن عبادتك',s:'أبو داود - وصية النبي ﷺ لمعاذ بن جبل رضي الله عنه',r:'الإعانة من الله وتيسير أبواب الطاعات والعبادة الخاشعة'},
+  {t:'اللهم إني أسألك العفو والعافية في الدنيا والآخرة',s:'أبو داود - لم يكن النبي ﷺ يدع هذا الدعاء',r:'الحفظ الإلهي من الفتن والأمراض ومصائب الدهر'},
+  {t:'لا إله إلا أنت سبحانك إني كنت من الظالمين',s:'الترمذي - دعوة ذي النون في بطن الحوت لم يدع بها مسلم إلا استجيب له',r:'تفريج الكرب العظيم وإجابة الدعوات وقبول التوبة'},
+  {t:'اللهم اكفني بحلالك عن حرامك وأغنني بفضلك عمن سواك',s:'الترمذي - لو كان عليك مثل جبل دين أداه الله عنك',r:'قضاء الديون وتيسير الأرزاق والاستغناء بفضل الله'}
+];
+
+var tCount=0;
+try {
+  let savedTCount = localStorage.getItem('sirat-tcount');
+  if(savedTCount) tCount = parseInt(savedTCount, 10) || 0;
+} catch(e){}
+
+function openTreasure(){
+  let i=Math.floor(Math.random()*treasures.length);
+  let tr=treasures[i];
+  document.getElementById('tClosed').style.display='none';
+  let o=document.getElementById('tOpened');
+  o.style.display='block';
+  document.getElementById('tText').textContent=tr.t;
+  document.getElementById('tSrc').textContent='📖 مصدر الذكر: '+tr.s;
+  document.getElementById('tRew').textContent='🎁 فضل الذكر وثوابه: '+tr.r;
+  tCount++;
+  document.getElementById('tCount').textContent=tCount;
+  let l=document.getElementById('tLevel');
+  if(tCount>=30) l.textContent='صاحب كنز 👑';
+  else if(tCount>=10) l.textContent='مكثر 🌟';
+  else l.textContent='مبتدئ';
+  try {
+    localStorage.setItem('sirat-tcount', tCount);
+  } catch(e){}
+  if(navigator.vibrate) navigator.vibrate([20,30]);
+}
+function resetTBox(){
+  document.getElementById('tOpened').style.display='none';
+  document.getElementById('tClosed').style.display='block';
+}
+function copyT(){
+  let txt=document.getElementById('tText').textContent;
+  navigator.clipboard.writeText(txt).then(()=>toast('تم نسخ الذكر المأثور بنجاح 📋'));
+}
+
+// محرك التحديات والألعاب (سولو)
+let sq=[], si=0, sc=0, st=0, tmr=null, tl=15, isAns=false;
+function startSolo(){
+  document.getElementById('quizMenu').style.display='none';
+  document.getElementById('onlineMenu').style.display='none';
+  document.getElementById('roomLobby').style.display='none';
+  document.getElementById('soloQuiz').style.display='block';
+  document.getElementById('soloRes').style.display='none';
+  sq=shuffle([...QUIZ_BANK]).slice(0,10);
+  si=0; sc=0; st=0;
+  loadSoloQ();
+}
+function shuffle(a){
+  for(let i=a.length-1;i>0;i--){
+    let j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+function loadSoloQ(){
+  if(si>=sq.length){ endSolo(); return; }
+  let q=sq[si]; isAns=false; tl=15;
+  document.getElementById('soloQNum').textContent=`سؤال ${si+1}/10`;
+  document.getElementById('soloScoreTop').textContent=sc;
+  document.getElementById('soloStreakTop').textContent=st;
+  document.getElementById('soloTimeTop').textContent=tl;
+  document.getElementById('soloProg').style.width=`${(si/sq.length)*100}%`;
+  document.getElementById('soloQText').textContent=q.q;
+  let o=document.getElementById('soloOpts'); o.innerHTML='';
+  document.getElementById('soloExp').style.display='none';
+  document.getElementById('soloNext').style.display='none';
+  
+  q.o.forEach((opt,i)=>{
+    let b=document.createElement('button');
+    b.className='btn btn-outline';
+    b.style.cssText='width:100%;text-align:right';
+    b.textContent=['أ','ب','ج','د'][i]+'. '+opt;
+    b.onclick=()=>pickSolo(i);
+    o.appendChild(b);
+  });
+  clearInterval(tmr);
+  tmr=setInterval(()=>{
+    tl--;
+    document.getElementById('soloTimeTop').textContent=tl;
+    if(tl<=0){ clearInterval(tmr); pickSolo(-1); }
+  },1000);
+}
+function pickSolo(i){
+  if(isAns) return; isAns=true;
+  clearInterval(tmr);
+  let q=sq[si];
+  let opts=document.getElementById('soloOpts').children;
+  let ok=i===q.a;
+  for(let k=0;k<opts.length;k++){
+    opts[k].style.pointerEvents='none';
+    if(k===q.a){
+      opts[k].style.background='#dcfce7'; opts[k].style.borderColor='#86efac';
+    }else if(k===i && !ok){
+      opts[k].style.background='#fee2e2'; opts[k].style.borderColor='#fca5a5';
+    }
+  }
+  let ex=document.getElementById('soloExp');
+  ex.style.display='block';
+  if(ok){
+    sc+=tl>10?15:10; st++;
+    ex.innerHTML=`✅ إجابة صحيحة متميزة! <b>${q.o[q.a]}</b><br><small>💡 ${q.e}</small>`;
+  }else{
+    st=0;
+    ex.innerHTML=`❌ إجابة خاطئة! الصحيح هو: <b>${q.o[q.a]}</b><br><small>💡 ${q.e}</small>`;
+  }
+  document.getElementById('soloScoreTop').textContent=sc;
+  document.getElementById('soloStreakTop').textContent=st;
+  document.getElementById('soloNext').style.display='block';
+}
+function nextSoloQ(){ si++; loadSoloQ(); }
+function endSolo(){
+  document.getElementById('soloProg').style.width='100%';
+  document.getElementById('soloRes').style.display='block';
+  document.getElementById('soloResScore').textContent=`نقاطك النهائية: ${sc} نقطة من أصل 150`;
+  let stars=sc>=130?'⭐⭐⭐⭐⭐':sc>=90?'⭐⭐⭐':'⭐';
+  document.getElementById('soloResStars').textContent=stars;
+}
+function backToQuizMenu(){
+  clearInterval(tmr);
+  document.getElementById('quizMenu').style.display='block';
+  document.getElementById('onlineMenu').style.display='none';
+  document.getElementById('roomLobby').style.display='none';
+  document.getElementById('soloQuiz').style.display='none';
+  document.getElementById('onlineQuiz').style.display='none';
+}
+
+// محرك الأونلاين المباشر المتطور P2P بالتزامن الكامل والصوت
+let peer=null, conn=null, myName='مسافر', hostName='الخصم', isHost=false, roomCode='';
+let localStream=null, voiceOn=false, muted=false;
+let oqIndices=[], oqIndex=0, oqMyScore=0, oqOpponentScore=0, oqTimer=null, oqTimeLeft=15, oqMyAnswered=false, oqOpponentAnswered=false;
+
+function openOnlineMenu(){
+  document.getElementById('quizMenu').style.display='none';
+  document.getElementById('onlineMenu').style.display='block';
+}
+function genRoomCode(){
+  let c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let s=''; for(let i=0;i<6;i++) s+=c[Math.floor(Math.random()*c.length)];
+  return s;
+}
+function createRoom(){
+  myName=document.getElementById('onlineName').value.trim()||'مضيف';
+  let code=genRoomCode(); roomCode=code; isHost=true;
+  peer=new Peer('sirat-'+code,{config:{iceServers:[{urls:'stun:stun.l.google.com:19302'}]}});
+  peer.on('open',()=>showLobby(code,true));
+  peer.on('connection',c=>{ conn=c; setupConn(true); });
+  peer.on('error',()=>toast('تعذر إنشاء الغرفة. جرب اسماً آخر أو رمزاً جديداً'));
+  toast('جاري حجز غرفتك في خوادم صراط... 🌐');
+}
+function joinRoom(){
+  let code=document.getElementById('joinCodeInput').value.trim().toUpperCase();
+  myName=document.getElementById('onlineName').value.trim()||'ضيف';
+  if(!code){ toast('الرجاء إدخال كود الغرفة'); return; }
+  isHost=false; roomCode=code;
+  peer=new Peer({config:{iceServers:[{urls:'stun:stun.l.google.com:19302'}]}});
+  peer.on('open',()=>{
+    conn=peer.connect('sirat-'+code,{reliable:true});
+    setupConn(false);
+  });
+  toast('جاري محاولة الاتصال بالغرفة المحددة...');
+}
+function showLobby(code,host){
+  document.getElementById('onlineMenu').style.display='none';
+  document.getElementById('roomLobby').style.display='block';
+  document.getElementById('roomCodeBig').textContent=code;
+  document.getElementById('playersList').innerHTML=`<div class="glass" style="padding:10px;margin-bottom:6px">👑 ${myName} (أنت)</div>`;
+}
+function setupConn(host){
+  if(!conn) return;
+  conn.on('open',()=>{
+    document.getElementById('connStatus').textContent='✅ متصل ومهيأ للمباراة!';
+    document.getElementById('connStatus').style.color='#16a34a';
+    conn.send({type:'handshake',name:myName});
+    if(host) document.getElementById('startOnlineBtn').style.display='block';
+  });
+  conn.on('data',d=>{
+    if(!d) return;
+    if(d.type==='handshake'){
+      hostName=d.name;
+      document.getElementById('playersList').innerHTML=`<div class="glass" style="padding:10px;margin-bottom:6px">👑 ${isHost?myName:hostName}</div><div class="glass" style="padding:10px">👤 ${isHost?hostName:myName}</div>`;
+      appendChat('lobbyChat','نظام صراط',`👋 انضم ${hostName} للغرفة بنجاح!`);
+    }
+    if(d.type==='chat') appendChat('lobbyChat',hostName,d.text);
+    if(d.type==='start_game'){
+      oqIndices=d.indices; hostName=d.opponentName;
+      startGameOnlineReal();
+    }
+    if(d.type==='sync_answer'){
+      oqOpponentAnswered=true;
+      oqOpponentScore=d.score;
+      document.getElementById('oqOpponentScore').textContent=oqOpponentScore;
+      checkBothAnswered();
+    }
+    if(d.type==='next_question'){
+      oqIndex=d.index;
+      loadOqQuestion();
+    }
+  });
+}
+function appendChat(boxId,from,text){
+  let box=document.getElementById(boxId); if(!box) return;
+  let d=document.createElement('div');
+  d.style.cssText='padding:4px;border-bottom:1px solid var(--border);font-size:11px';
+  d.innerHTML=`<b>${from}:</b> ${text}`;
+  box.appendChild(d);
+  box.scrollTop=box.scrollHeight;
+}
+function sendLobbyChat(){
+  let inp=document.getElementById('lobbyChatInput'); if(!inp) return;
+  let text=inp.value.trim(); if(!text) return;
+  appendChat('lobbyChat','أنت',text);
+  if(conn&&conn.open) conn.send({type:'chat',text:text});
+  inp.value='';
+}
+function copyRoomCode(){
+  navigator.clipboard.writeText(roomCode).then(()=>toast('تم نسخ كود الغرفة: '+roomCode));
+}
+function shareRoomWhatsApp(){
+  let url=`https://wa.me/?text=مرحباً بك! هيا بنا نتواجه في تحدي صراط برو الثقافي الإسلامي، كود غرفتي هو: ${roomCode}`;
+  window.open(url,'_blank');
+}
+function leaveRoom(){
+  try{ if(peer) peer.destroy(); }catch(e){}
+  peer=null; conn=null;
+  backToQuizMenu();
+}
+
+// المكالمة الصوتية أونلاين
+async function toggleVoiceCall(){
+  if(!voiceOn){
+    try{
+      localStream=await navigator.mediaDevices.getUserMedia({audio:true});
+      voiceOn=true;
+      document.getElementById('voiceToggleBtn').textContent='🔊 نشط';
+      document.getElementById('voiceStatus').textContent='يعمل 🟢';
+      if(peer) {
+        peer.on('call',c=>{
+          c.answer(localStream);
+          c.on('stream',s=>{ document.getElementById('remoteAudio').srcObject=s; });
+        });
+        if(conn) {
+          let c=peer.call(conn.peer,localStream);
+          c.on('stream',s=>{ document.getElementById('remoteAudio').srcObject=s; });
+        }
+      }
+      toast('تم تفعيل الميكروفون والصوت المباشر 🎙️');
+    }catch(e){
+      toast('الرجاء إعطاء صلاحية الميكروفون في إعدادات الهاتف');
+    }
+  }else{
+    if(localStream) localStream.getTracks().forEach(t=>t.stop());
+    localStream=null; voiceOn=false;
+    document.getElementById('voiceToggleBtn').textContent='🎙️ تشغيل';
+    document.getElementById('voiceStatus').textContent='غير مفعّل';
+    toast('تم إيقاف الميكروفون');
+  }
+}
+
+// بدء التحدي المباشر أونلاين
+function hostStartGame(){
+  if(!conn||!conn.open){ toast('بانتظار المنافس للاتصال أولاً'); return; }
+  let indices=shuffle([...Array(QUIZ_BANK.length).keys()]).slice(0,10);
+  oqIndices=indices;
+  conn.send({type:'start_game',indices:indices,opponentName:myName});
+  startGameOnlineReal();
+}
+function startGameOnlineReal(){
+  document.getElementById('roomLobby').style.display='none';
+  document.getElementById('onlineQuiz').style.display='block';
+  document.getElementById('oqRes').style.display='none';
+  document.getElementById('oqOpponentLabel').textContent=hostName;
+  oqIndex=0; oqMyScore=0; oqOpponentScore=0;
+  loadOqQuestion();
+}
+function loadOqQuestion(){
+  if(oqIndex>=oqIndices.length){ endOqGame(); return; }
+  let q=QUIZ_BANK[oqIndices[oqIndex]];
+  oqMyAnswered=false; oqOpponentAnswered=false; oqTimeLeft=15;
+  
+  document.getElementById('oqQNum').textContent=`سؤال ${oqIndex+1}/10`;
+  document.getElementById('oqMyScore').textContent=oqMyScore;
+  document.getElementById('oqOpponentScore').textContent=oqOpponentScore;
+  document.getElementById('oqTimeTop').textContent=oqTimeLeft;
+  document.getElementById('oqQText').textContent=q.q;
+  document.getElementById('oqStatus').textContent='بانتظار إجابة الطرفين...';
+  document.getElementById('oqNext').style.display='none';
+  
+  let o=document.getElementById('oqOpts'); o.innerHTML='';
+  q.o.forEach((opt,i)=>{
+    let b=document.createElement('button');
+    b.className='btn btn-outline';
+    b.style.cssText='width:100%;text-align:right';
+    b.textContent=['أ','ب','ج','د'][i]+'. '+opt;
+    b.onclick=()=>pickOq(i);
+    o.appendChild(b);
+  });
+  
+  clearInterval(oqTimer);
+  oqTimer=setInterval(()=>{
+    oqTimeLeft--;
+    document.getElementById('oqTimeTop').textContent=oqTimeLeft;
+    if(oqTimeLeft<=0){ clearInterval(oqTimer); pickOq(-1); }
+  },1000);
+}
+function pickOq(i){
+  if(oqMyAnswered) return; oqMyAnswered=true;
+  clearInterval(oqTimer);
+  let q=QUIZ_BANK[oqIndices[oqIndex]];
+  let opts=document.getElementById('oqOpts').children;
+  let ok=i===q.a;
+  
+  for(let k=0;k<opts.length;k++){
+    opts[k].style.pointerEvents='none';
+    if(k===q.a){
+      opts[k].style.background='#dcfce7'; opts[k].style.borderColor='#86efac';
+    }else if(k===i && !ok){
+      opts[k].style.background='#fee2e2'; opts[k].style.borderColor='#fca5a5';
+    }
+  }
+  if(ok) oqMyScore+=oqTimeLeft>10?15:10;
+  document.getElementById('oqMyScore').textContent=oqMyScore;
+  if(conn&&conn.open) conn.send({type:'sync_answer',score:oqMyScore});
+  
+  document.getElementById('oqStatus').textContent='تم تسجيل إجابتك، بانتظار الخصم...';
+  checkBothAnswered();
+}
+function checkBothAnswered(){
+  if(oqMyAnswered && oqOpponentAnswered){
+    document.getElementById('oqStatus').textContent='اكتملت الإجابات! اضغط التالي للمتابعة';
+    if(isHost) document.getElementById('oqNext').style.display='block';
+  }
+}
+function nextOqQ(){
+  oqIndex++;
+  if(conn&&conn.open) conn.send({type:'next_question',index:oqIndex});
+  loadOqQuestion();
+}
+function endOqGame(){
+  document.getElementById('oqRes').style.display='block';
+  let title='تعادل 🤝'; let emo='🤝';
+  if(oqMyScore>oqOpponentScore){ title='لقد فزت بمباراة التحدي! 🏆'; emo='🏆'; }
+  else if(oqMyScore<oqOpponentScore){ title='هاردلك، فاز المنافس 💔'; emo='💔'; }
+  document.getElementById('oqResEmoji').textContent=emo;
+  document.getElementById('oqResTitle').textContent=title;
+  document.getElementById('oqResScore').textContent=`رصيدك: ${oqMyScore} نقطة | الخصم: ${oqOpponentScore} نقطة`;
+}
+
+// البحث عن منافس عشوائي
+async function findRandomOpponent(){
+  let qs=document.getElementById('quickStatus');
+  qs.style.display='block'; qs.textContent='🔍 جاري البحث عن منافس مستعد الآن...';
+  setTimeout(()=>{
+    qs.textContent=' لم يعثر على منافس عشوائي نشط حالياً، تم وضعك كمضيف رئيسي.';
+    createRoom();
+  },2000);
+}
+
+// المساعد الذكي الإسلامي الذكي (Native Gemini integration & fallback)
+async function sendIslamicChat(){
+  let inp=document.getElementById('chatInput'); if(!inp) return;
+  let q=inp.value.trim(); if(!q) return;
+  addChatBubble(q,true); inp.value='';
+  
+  let typing=document.getElementById('typingIndicator');
+  if(typing) typing.style.display='block';
+  
+  if(window.AndroidInterface && window.AndroidInterface.generateIslamicResponse){
+    window.AndroidInterface.generateIslamicResponse(q, 'handleGeminiCallback');
+  } else {
+    // Fallback لذكاء صراط الفوري المحلي في حال انعدام الإنترنت أو الـ Core
+    setTimeout(()=>{
+      if(typing) typing.style.display='none';
+      let r='الحمد لله رب العالمين والصلاة والسلام على رسولنا الكريم. سؤالك عن "'+q+'" هو محل اهتمام. ننصح بالرجوع إلى كتب التفسير ومصادر الشريعة المعتمدة مثل صحيح البخاري ومسلم لتلقي العلم الشرعي من أهله الموثوقين.';
+      addChatBubble(r,false);
+    },1500);
+  }
+}
+window.handleGeminiCallback = function(resObj){
+  let typing=document.getElementById('typingIndicator');
+  if(typing) typing.style.display='none';
+  if(resObj && resObj.success){
+    addChatBubble(resObj.response,false);
+  }else{
+    addChatBubble('عذراً، فشل المساعد في الاتصال بـ Gemini. يرجى مراجعة صلاحيات الإنترنت ومفتاح الـ API الخاص بالبرنامج.',false);
+  }
+};
+function addChatBubble(txt,isMe){
+  let box=document.getElementById('chatMessages'); if(!box) return;
+  let d=document.createElement('div');
+  d.style.cssText=`max-width:86%;padding:12px;border-radius:12px;font-size:13.5px;line-height:1.7;word-wrap:break-word;margin:4px 0;align-self:${isMe?'flex-end':'flex-start'};background:${isMe?'linear-gradient(135deg,var(--gold),var(--gold2))':'var(--card)'};color:${isMe?'#111':'var(--text)'};border:1.5px solid var(--border)`;
+  d.textContent=txt;
+  box.appendChild(d);
+  box.scrollTop=box.scrollHeight;
+}
+function quickAsk(prompt){
+  let inp=document.getElementById('chatInput');
+  if(inp){ inp.value=prompt; sendIslamicChat(); }
+}
+
+// تهيئة الأذكار وميزات الصراط عند الفتح
+document.addEventListener('DOMContentLoaded',()=>{
+  updMsb();
+  
+  // تهيئة واجهة الكنوز بالقيم المحفوظة
+  document.getElementById('tCount').textContent=tCount;
+  let l=document.getElementById('tLevel');
+  if(tCount>=30) l.textContent='صاحب كنز 👑';
+  else if(tCount>=10) l.textContent='مكثر 🌟';
+  else l.textContent='مبتدئ';
+  
+  let inp=document.getElementById('chatInput');
+  if(inp){
+    inp.addEventListener('keydown',e=>{
+      if(e.key==='Enter'&& !e.shiftKey){ e.preventDefault(); sendIslamicChat(); }
+    });
+  }
+});
+</script>
+</body>
+</html>

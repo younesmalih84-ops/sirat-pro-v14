@@ -1,0 +1,6 @@
+{
+  "name": "صراط برو",
+  "description": "صراط برو - تطبيق إسلامي متكامل يضم القرآن الكريم، الأذكار، المسبحة الذكية، بوصلة القبلة، التقويم الهجري، ومساعداً ذكياً مدعوماً بالذكاء الاصطناعي Gemini للرد على الأسئلة الدينية والشرعية.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

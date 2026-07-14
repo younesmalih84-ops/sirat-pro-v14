@@ -11,21 +11,33 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
       - uses: gradle/actions/setup-gradle@v3
-      - name: Fix project
+      - name: Fix project - Ultimate Fix
         run: |
           echo "sdk.dir=$ANDROID_HOME" > local.properties
           chmod +x gradlew || true
           mkdir -p gradle/wrapper
           curl -L -o gradle/wrapper/gradle-wrapper.jar https://raw.githubusercontent.com/gradle/gradle/v8.7.0/gradle/wrapper/gradle-wrapper.jar || true
-          sed -i '/signingConfig/d' app/build.gradle.kts || true
+          python3 << 'PY'
+          import re, pathlib
+          f = pathlib.Path("app/build.gradle.kts")
+          if f.exists():
+              t = f.read_text()
+              t = re.sub(r'signingConfigs\s*\{[\s\S]*?\n\s*\}\s*\n', '', t)
+              t = re.sub(r'signingConfig.*\n', '', t)
+              f.write_text(t)
+          PY
           echo "GEMINI_API_KEY=dummy" > .env
+          mkdir -p app
           echo "GEMINI_API_KEY=dummy" > app/.env || true
+          echo '{"project_info":{}}' > app/google-services.json || true
       - name: Build APK
-        run: |
-          ./gradlew assembleDebug --stacktrace || gradle assembleDebug
+        run: ./gradlew clean assembleDebug --stacktrace
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: sirat-pro-APK
+          name: sirat-pro-APK-FINAL
           path: app/build/outputs/apk/debug/*.apk

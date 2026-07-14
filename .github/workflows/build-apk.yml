@@ -14,25 +14,33 @@ jobs:
           distribution: 'temurin'
 
       - uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: 8.7
 
-      - name: Fix project as README says
+      - name: Fix ONLY the bad line (as README says)
         run: |
           echo "sdk.dir=$ANDROID_HOME" > local.properties
+          # رجع الملف الأصلي باش ما يبقاش مخربق
+          git checkout -- app/build.gradle.kts || git restore app/build.gradle.kts || true
+          # حيد غير السطر الواحد اللي قالو فالـ README
+          sed -i '/signingConfig.*getByName.*debugConfig/d' app/build.gradle.kts
           echo "GEMINI_API_KEY=dummy" > .env
-          echo '{"project_info":{}}' > app/google-services.json || true
-          echo '{"project_info":{}}' > google-services.json || true
-          # هذا هو السطر اللي قالو حيدو فالـ README
-          sed -i '/signingConfig.*debugConfig/d' app/build.gradle.kts || true
-          sed -i '/signingConfigs/d' app/build.gradle.kts || true
-          cat app/build.gradle.kts | grep -n signing || echo "signing fixed"
+          # شوف واش تصلح
+          cat app/build.gradle.kts | grep -n signing || echo "signing line removed OK"
+          # جيب package name الحقيقي
+          PKG=$(grep -o 'applicationId.*".*"' app/build.gradle.kts | head -1 | cut -d'"' -f2)
+          if [ -z "$PKG" ]; then PKG="com.sirat.pro"; fi
+          echo "Package is $PKG"
+          mkdir -p app
+          cat > app/google-services.json << JSON
+          {"project_info":{"project_number":"123","project_id":"sirat-pro","storage_bucket":"dummy.appspot.com"},"client":[{"client_info":{"mobilesdk_app_id":"1:123:android:abc","android_client_info":{"package_name":"$PKG"}},"oauth_client":[],"api_key":[{"current_key":"dummy"}],"services":{}}],"configuration_version":"1"}
+          JSON
 
-      - name: Build with Gradle (not gradlew)
+      - name: Build APK
         run: gradle assembleDebug --stacktrace
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: sirat-pro-APK-FINAL
-          path: |
-            app/build/outputs/apk/debug/*.apk
-            **/build/outputs/apk/debug/*.apk
+          name: sirat-pro-APK-WORKING
+          path: app/build/outputs/apk/debug/*.apk

@@ -13,26 +13,42 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Fix gradle
+      - name: Find gradlew
         run: |
-          chmod +x gradlew || true
-          mkdir -p gradle/wrapper
-          curl -sL https://raw.githubusercontent.com/gradle/gradle/v8.7.0/gradle/wrapper/gradle-wrapper.jar -o gradle/wrapper/gradle-wrapper.jar || true
+          ls -la
+          find . -maxdepth 3 -name gradlew -type f
           echo "sdk.dir=$ANDROID_HOME" > local.properties
+          echo "sdk.dir=$ANDROID_HOME" > android/local.properties || true
 
-      - name: Fix signing - use debug key
+      - name: Fix wrapper
         run: |
-          sed -i 's/getByName("release")/getByName("debug")/g' app/build.gradle.kts || true
-          sed -i 's/signingConfigs.release/signingConfigs.debug/g' app/build.gradle.kts || true
+          chmod +x $(find . -name gradlew) || true
+          mkdir -p gradle/wrapper android/gradle/wrapper || true
+          curl -sL https://raw.githubusercontent.com/gradle/gradle/v8.7.0/gradle/wrapper/gradle-wrapper.jar -o gradle/wrapper/gradle-wrapper.jar || true
+          curl -sL https://raw.githubusercontent.com/gradle/gradle/v8.7.0/gradle/wrapper/gradle-wrapper.jar -o android/gradle/wrapper/gradle-wrapper.jar || true
+
+      - name: Fix signing
+        run: |
           echo "GEMINI_API_KEY=dummy" > .env || true
-          echo '{"project_info":{}}' > app/google-services.json || true
           echo '{"project_info":{}}' > google-services.json || true
+          echo '{"project_info":{}}' > app/google-services.json || true
+          echo '{"project_info":{}}' > android/app/google-services.json || true
 
       - name: Build APK
-        run: ./gradlew assembleDebug --stacktrace
+        run: |
+          if [ -f ./gradlew ]; then
+            ./gradlew assembleDebug --stacktrace
+          elif [ -f ./android/gradlew ]; then
+            cd android && ./gradlew assembleDebug --stacktrace
+          else
+            echo "gradlew not found anywhere!" && exit 1
+          fi
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: sirat-pro-APK
-          path: app/build/outputs/apk/debug/*.apk
+          path: |
+            app/build/outputs/apk/debug/*.apk
+            android/app/build/outputs/apk/debug/*.apk
+            **/build/outputs/apk/debug/*.apk
